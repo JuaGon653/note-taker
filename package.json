@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/JuaGon653/note-taker/issues"
   },
-  "homepage": "https://github.com/JuaGon653/note-taker#readme"
+  "homepage": "https://github.com/JuaGon653/note-taker#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
 }

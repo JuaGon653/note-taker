@@ -2,7 +2,6 @@ const express = require('express');
 const notes = require('./db/db.json');
 const path = require('path');
 const fs = require('fs');
-const { notStrictEqual } = require('assert');
 
 const PORT = process.env.PORT || 3001;
 
@@ -41,7 +40,10 @@ app.post('/api/notes', (req, res) => {
             let notesArr = JSON.parse(data);
             notesArr.push(newNote);
             fs.writeFileSync('./db/db.json', JSON.stringify(notesArr), () => {});
-            res.json(notesArr)
+            fs.readFile('./db/db.json', (err, data) => {
+                res.json(data)
+            });
+            
         });
 
         

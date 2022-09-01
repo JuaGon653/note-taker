@@ -1,6 +1,8 @@
 const express = require('express');
 const notes = require('./db/db.json');
 const path = require('path');
+const fs = require('fs');
+const { notStrictEqual } = require('assert');
 
 const PORT = 3001;
 
@@ -22,6 +24,37 @@ app.get('/notes', (req, res) => {
 
 app.get('/api/notes', (req, res) => {
     res.json(notes);
+})
+
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request received to add a review`);
+    const { title, text } = req.body;
+
+    if(title && text) {
+
+        const newNote = {
+            title,
+            text
+        };
+
+        fs.readFile('./db/db.json', (err, data) => {
+            let notesArr = JSON.parse(data);
+            notesArr.push(newNote);
+            fs.writeFileSync('./db/db.json', JSON.stringify(notesArr), () => {});
+            res.json(notesArr)
+        });
+
+        
+
+        const response = {
+            status: 'success', 
+            body: newNote
+        }
+
+        
+    } else {
+        res.status(500).json('Error in posting new note');
+    }
 })
 
 

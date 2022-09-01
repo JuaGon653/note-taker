@@ -44,7 +44,7 @@ const saveNote = (note) =>
     },
     body: JSON.stringify(note),
   })
-    .then(res => res)
+    .then(res => res.json())
     .then(data => data);
 
 const deleteNote = (id) =>
@@ -94,8 +94,8 @@ const handleNoteDelete = (e) => {
     activeNote = {};
   }
 
-  deleteNote(noteId).then(() => {
-    getAndRenderNotes();
+  deleteNote(noteId).then((response) => {
+    getAndRenderNotes(response);
     renderActiveNote();
   });
 };

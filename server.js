@@ -22,7 +22,11 @@ app.get('/notes', (req, res) => {
 });
 
 app.get('/api/notes', (req, res) => {
-    res.json(notes);
+    let updateNotes;
+    fs.readFile('./db/db.json', (err, data) => {
+        updateNotes = JSON.parse(data);
+        res.json(updateNotes);
+    })
 })
 
 app.post('/api/notes', (req, res) => {
@@ -39,21 +43,14 @@ app.post('/api/notes', (req, res) => {
         fs.readFile('./db/db.json', (err, data) => {
             let notesArr = JSON.parse(data);
             notesArr.push(newNote);
-            fs.writeFileSync('./db/db.json', JSON.stringify(notesArr), () => {});
-            fs.readFile('./db/db.json', (err, data) => {
-                res.json(data)
-            });
-            
+            fs.writeFile('./db/db.json', JSON.stringify(notesArr, null, 4), () => {});
         });
 
-        
-
         const response = {
-            status: 'success', 
-            body: newNote
-        }
-
-        
+            status: 'success',
+            body: newNote,
+        };
+        res.json(response);
     } else {
         res.status(500).json('Error in posting new note');
     }

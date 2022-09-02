@@ -2,6 +2,7 @@ const express = require('express');
 const notes = require('./db/db.json');
 const path = require('path');
 const fs = require('fs');
+const uuid = require('./public/helpers/uuid');
 
 const PORT = process.env.PORT || 3001;
 
@@ -37,7 +38,8 @@ app.post('/api/notes', (req, res) => {
 
         const newNote = {
             title,
-            text
+            text,
+            id: uuid(),
         };
 
         fs.readFile('./db/db.json', (err, data) => {
@@ -54,6 +56,21 @@ app.post('/api/notes', (req, res) => {
     } else {
         res.status(500).json('Error in posting new note');
     }
+})
+
+app.delete('/api/notes/:id', (req, res) => {
+    console.info(`${req.method} request received to add a review`);
+    fs.readFile('./db/db.json', (err, data) => {
+        let notesArr = JSON.parse(data);
+        for(let i = 0; i < notesArr.length; i++) {
+            if(notesArr[i].id == req.params.id) {
+                notesArr.splice(i, 1);
+            }
+        }
+        fs.writeFile('./db/db.json', JSON.stringify(notesArr, null, 4), () => {});
+    });
+
+    res.json('Item Deleted');
 })
 
 

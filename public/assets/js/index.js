@@ -54,12 +54,14 @@ const deleteNote = (id) =>
     headers: {
       'Content-Type': 'application/json',
     },
-  });
+  })
+  .then(res => res.json())
+  .then(data => data);
 
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
-  if (activeNote.title) {
+  if (activeNote.id) {
     noteTitle.setAttribute('readonly', true);
     noteText.setAttribute('readonly', true);
     noteTitle.value = activeNote.title;

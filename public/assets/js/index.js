@@ -27,6 +27,7 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
+// returns the current saved notes
 const getNotes = () =>
   fetch('/api/notes', {
     method: 'GET',
@@ -37,6 +38,7 @@ const getNotes = () =>
     .then((res) => res.json())
     .then(data => data);
 
+// uses POST method to add a new note
 const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
@@ -48,6 +50,7 @@ const saveNote = (note) =>
     .then(res => res.json())
     .then(data => data)
 
+// uses the DELETE method to delete the note by using the targetted element's id
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
     method: 'DELETE',
@@ -58,6 +61,7 @@ const deleteNote = (id) =>
   .then(res => res.json())
   .then(data => data);
 
+// displays selected saved note
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 
@@ -175,6 +179,7 @@ const renderNoteList = async (notes) => {
 
   if (window.location.pathname === '/notes') {
     noteListItems.forEach((note) => noteList[0].append(note));
+    // creates event listeners for the listed notes that runs handleNoteView when clicked
     item = document.querySelector('.list-group-item');
     item.addEventListener('click', handleNoteView);
   }
@@ -189,6 +194,7 @@ if (window.location.pathname === '/notes') {
   noteTitle.addEventListener('keyup', handleRenderSaveBtn);
   noteText.addEventListener('keyup', handleRenderSaveBtn);
 }
+// displays saved notes on start up
 function init() {
   getAndRenderNotes();
 }

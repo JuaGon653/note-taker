@@ -31,7 +31,7 @@ app.get('/api/notes', (req, res) => {
     let updateNotes;
     fs.readFile('./db/db.json', (err, data) => {
         updateNotes = JSON.parse(data);
-        res.json(updateNotes);
+        res.status(200).json(updateNotes);
     })
 })
 
@@ -58,9 +58,9 @@ app.post('/api/notes', (req, res) => {
             status: 'success',
             body: newNote,
         };
-        res.json(response);
+        res.status(200).json(response);
     } else {
-        res.status(500).json('Error in posting new note');
+        res.status(400).json('Request body must contain a note title and text');
     }
 })
 
@@ -77,12 +77,10 @@ app.delete('/api/notes/:id', (req, res) => {
             }
             fs.writeFile('./db/db.json', JSON.stringify(notesArr, null, 4), () => {});
         });
-        res.json('Item Deleted');
+        res.status(200).json('Item Deleted');
     } else {
-        res.json('')
+        res.status(400).json('id not found')
     }
-
-    
 })
 
 

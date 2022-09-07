@@ -37,7 +37,7 @@ app.get('/api/notes', (req, res) => {
 
 // adds new saved note to json file
 app.post('/api/notes', (req, res) => {
-    console.info(`${req.method} request received to add a review`);
+    // console.info(`${req.method} request received to add a review`);
     const { title, text } = req.body;
 
     if(title && text) {
@@ -66,18 +66,23 @@ app.post('/api/notes', (req, res) => {
 
 // deletes note out of json file based off of the id
 app.delete('/api/notes/:id', (req, res) => {
-    console.info(`${req.method} request received to add a review`);
-    fs.readFile('./db/db.json', (err, data) => {
-        let notesArr = JSON.parse(data);
-        for(let i = 0; i < notesArr.length; i++) {
-            if(notesArr[i].id == req.params.id) {
-                notesArr.splice(i, 1);
+    if(req.params.id){
+        // console.info(`${req.method} request received to add a review`);
+        fs.readFile('./db/db.json', (err, data) => {
+            let notesArr = JSON.parse(data);
+            for(let i = 0; i < notesArr.length; i++) {
+                if(notesArr[i].id == req.params.id) {
+                    notesArr.splice(i, 1);
+                }
             }
-        }
-        fs.writeFile('./db/db.json', JSON.stringify(notesArr, null, 4), () => {});
-    });
+            fs.writeFile('./db/db.json', JSON.stringify(notesArr, null, 4), () => {});
+        });
+        res.json('Item Deleted');
+    } else {
+        res.json('')
+    }
 
-    res.json('Item Deleted');
+    
 })
 
 
